@@ -2,12 +2,15 @@ package com.project.oop.PMS.controller;
 
 import com.project.oop.PMS.entity.User;
 import com.project.oop.PMS.service.UserService;
+import com.project.oop.PMS.dto.LoginRequest;
+import com.project.oop.PMS.dto.RegisterRequest;
+import com.project.oop.PMS.dto.UserResponse;
+import com.project.oop.PMS.dto.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -16,44 +19,28 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    // Đăng ký người dùng
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Map<String, String> request) {
-        String username = request.get("username");
-        String password = request.get("password");
-
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
-            User newUser = userService.registerUser(username, password);
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", "User registered successfully");
-            Map<String, Object> userData = new HashMap<>();
-            userData.put("id", newUser.getUserID());
-            userData.put("username", newUser.getName());
-            response.put("user", userData);
-            return ResponseEntity.ok(response);
+            User newUser = userService.registerUser(request.getUsername(), request.getPassword());
+            UserResponse userResponse = new UserResponse(newUser.getUserID(), newUser.getUsername());
+            return ResponseEntity.ok(new ApiResponse("User registered successfully", userResponse));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new ApiResponse("Error: " + e.getMessage()));
         }
     }
 
+    // Đăng nhập người dùng
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
-        String username = request.get("username");
-        String password = request.get("password");
-
-        return userService.loginUser(username, password)
-                .map(user -> {
-                    Map<String, Object> response = new HashMap<>();
-                    response.put("message", "User login successfully");
-                    Map<String, Object> userData = new HashMap<>();
-                    userData.put("id", user.getUserID());
-                    userData.put("username", user.getName());
-                    response.put("user", userData);
-                    return ResponseEntity.ok(response);
-                })
-                .orElseGet(() -> {
-                    Map<String, Object> errorResponse = new HashMap<>();
-                    errorResponse.put("message", "Invalid username or password");
-                    return ResponseEntity.status(401).body(errorResponse);
-                });
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        Optional<User> user = userService.loginUser(request.getUsername(), request.getPassword());
+        
+        return user.map(u -> {
+            UserResponse userResponse = new UserResponse(u.getUserID(), u.getUsername());
+            return ResponseEntity.ok(new ApiResponse("User login successfully", userResponse));
+        }).orElseGet(() -> {
+            return ResponseEntity.status(401).body(new ApiResponse("Invalid username or password"));
+        });
     }
 }

@@ -1,54 +1,22 @@
 package com.project.oop.PMS.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
-@Table(name = "users") // Ánh xạ với bảng "users"
+@Table(name = "users") // ánh xạ với bảng "users" trong cơ sở dữ liệu
+@Data
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userID;
 
     @Column(name = "username", nullable = false, unique = true)
-    private String name;
+    private String username;
 
     @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "email")
     private String email;
-
-    // Các getter và setter
-    public Integer getUserID() {
-        return userID;
-    }
-
-    public void setUserID(Integer userID) {
-        this.userID = userID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

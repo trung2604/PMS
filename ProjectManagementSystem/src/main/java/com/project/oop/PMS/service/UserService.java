@@ -13,24 +13,18 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User registerUser(String username, String password) {
-        // Kiểm tra trùng lặp username
-        if (userRepository.findByName(username).isPresent()) {
-            throw new RuntimeException("Username đã tồn tại!");
+    public User registerUser(String username, String password) throws Exception {
+        if (userRepository.existsByUsername(username)) {
+            throw new Exception("Username already exists");
         }
 
-        // Tạo và lưu người dùng mới
         User user = new User();
-        user.setName(username);
+        user.setUsername(username);
         user.setPassword(password);
         return userRepository.save(user);
     }
 
     public Optional<User> loginUser(String username, String password) {
-        Optional<User> user = userRepository.findByName(username);
-        if (user.isPresent() && user.get().getPassword().equals(password)) {
-            return user;
-        }
-        return Optional.empty();
+        return userRepository.findByUsernameAndPassword(username, password);
     }
 }

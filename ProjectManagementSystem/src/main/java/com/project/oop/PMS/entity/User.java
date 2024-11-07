@@ -3,38 +3,37 @@ package com.project.oop.PMS.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users") // Tên bảng trong cơ sở dữ liệu là "users"
+@Table(name = "users") // Ánh xạ với bảng "users"
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String username;
+    private Integer userID;
+
+    @Column(name = "username", nullable = false, unique = true)
+    private String name;
+
+    @Column(name = "password", nullable = false)
     private String password;
 
-    // Constructors
-    public User() {
+    @Column(name = "email")
+    private String email;
+
+    // Các getter và setter
+    public Integer getUserID() {
+        return userID;
     }
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public void setUserID(Integer userID) {
+        this.userID = userID;
     }
 
-    // Getters và Setters
-    public Long getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
@@ -43,5 +42,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

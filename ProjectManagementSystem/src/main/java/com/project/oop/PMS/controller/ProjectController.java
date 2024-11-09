@@ -3,6 +3,8 @@ package com.project.oop.PMS.controller;
 import com.project.oop.PMS.entity.Project;
 import com.project.oop.PMS.service.ProjectService;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,11 +65,11 @@ public class ProjectController {
             return ResponseEntity.status(404).body(Map.of("message", "Project not found"));
         }
     }
-
+    @Transactional
     // Xóa project
-    @DeleteMapping("/{projectId}")
-    public ResponseEntity<?> deleteProject(@PathVariable Long projectId) {
-        if (projectService.deleteProject(projectId)) {
+    @DeleteMapping("/{projectName}")
+    public ResponseEntity<?> deleteProject(@PathVariable String projectName) {
+        if (projectService.deleteProjectByName(projectName)) {
             return ResponseEntity.ok(Map.of("message", "Project deleted successfully"));
         } else {
             return ResponseEntity.status(404).body(Map.of("message", "Project not found"));

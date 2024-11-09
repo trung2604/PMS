@@ -36,9 +36,9 @@ public class ProjectService {
         return Optional.empty();
     }
 
-    public boolean deleteProject(Long projectId) {
-        if (projectRepository.existsById(projectId)) {
-            projectRepository.deleteById(projectId);
+    public boolean deleteProjectByName(String projectName) {
+        if (projectRepository.existsByName(projectName)) {
+            projectRepository.deleteByName(projectName);
             return true;
         }
         return false;

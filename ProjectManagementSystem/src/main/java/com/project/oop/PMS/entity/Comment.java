@@ -4,15 +4,16 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "comment")
+@Table(name = "comments")
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer commentID;
 
-    @Column(name = "taskID")
-    private Integer taskID;
+    @ManyToOne
+    @JoinColumn(name = "task_id", referencedColumnName = "taskID", nullable = false)
+    private Task task;
 
     @Column(name = "createDate")
     private Date createDate;

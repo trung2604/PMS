@@ -2,9 +2,10 @@ package com.project.oop.PMS.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import java.util.Set;
 
 @Entity
-@Table(name = "users") // ánh xạ với bảng "users" trong cơ sở dữ liệu
+@Table(name = "users")
 @Data
 public class User {
     @Id
@@ -19,4 +20,16 @@ public class User {
 
     @Column(name = "email")
     private String email;
+
+    // Projects managed by this user
+    @OneToMany(mappedBy = "manager")
+    private Set<Project> managedProjects;
+
+    // Projects where this user is a member
+    @ManyToMany(mappedBy = "members")
+    private Set<Project> memberProjects;
+
+    // Tasks where this user is a member
+    @ManyToMany(mappedBy = "members")
+    private Set<Task> memberTasks;
 }

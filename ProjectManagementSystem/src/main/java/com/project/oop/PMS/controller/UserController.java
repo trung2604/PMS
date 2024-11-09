@@ -1,11 +1,12 @@
 package com.project.oop.PMS.controller;
 
-import com.project.oop.PMS.entity.User;
-import com.project.oop.PMS.service.UserService;
+import com.project.oop.PMS.dto.ApiResponse;
 import com.project.oop.PMS.dto.LoginRequest;
 import com.project.oop.PMS.dto.RegisterRequest;
 import com.project.oop.PMS.dto.UserResponse;
-import com.project.oop.PMS.dto.ApiResponse;
+import com.project.oop.PMS.entity.User;
+import com.project.oop.PMS.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,4 +44,5 @@ public class UserController {
             return ResponseEntity.status(401).body(new ApiResponse("Invalid username or password"));
         });
     }
+
 }
